@@ -76,8 +76,10 @@ class ProblemTask {
 }
 
 (async () => {
-  const tasks = getProblems().map((i) => new ProblemTask(i));
   const notFounds: string[] = readJSONFile("refs/not-founds.json");
+  const tasks = getProblems()
+    .filter((i) => !notFounds.includes(i.isbn_c_p))
+    .map((i) => new ProblemTask(i));
   const addNotFound = (isbn_c_p: string) => {
     notFounds.push(isbn_c_p);
     writeJSONFile("refs/not-founds.json", notFounds);
@@ -95,7 +97,10 @@ class ProblemTask {
         });
       }
     }
-    if (ProblemTask.donwloaded >= 1000) push();
+    if (ProblemTask.donwloaded >= 1000) {
+      push();
+      ProblemTask.donwloaded = 0;
+    }
     setTimeout(run, 0);
   };
   const push = () => {
@@ -110,7 +115,8 @@ class ProblemTask {
     execSync("git push");
     console.timeEnd("PUSHED");
   };
-  run();
+  push();
+  // run();
 })();
 
 // CMD: node ./dist/index.js
