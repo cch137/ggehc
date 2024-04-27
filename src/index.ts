@@ -75,7 +75,7 @@ class ProblemTask {
   const tasks = getProblems().map((i) => new ProblemTask(i));
   const run = () => {
     if (tasks.length === 0) return;
-    if (ProblemTask.execting.size < 64) {
+    if (ProblemTask.execting.size < 256) {
       const task = tasks.shift()!;
       task.exec(() => {
         if (!task.done) tasks.push(task);
@@ -88,10 +88,10 @@ class ProblemTask {
     execSync('git commit -m "upload"');
     execSync("git push");
     console.log("PUSHED");
-    setTimeout(push, 1000);
+    setTimeout(push, 10000);
   };
   run();
-  push();
+  setTimeout(push, 10000);
 })();
 
 // CMD: node ./dist/index.js
