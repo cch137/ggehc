@@ -115,8 +115,8 @@ class ProblemTask {
       }
     }
     if (ProblemTask.donwloaded >= 1000) {
-      push();
       ProblemTask.donwloaded = 0;
+      push();
     }
     setTimeout(() => run(), 1);
   };
