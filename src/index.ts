@@ -38,6 +38,7 @@ function getProblems() {
 }
 
 class ProblemTask {
+  static donwloaded: 0;
   static execting: Set<ProblemTask> = new Set();
   readonly problem: Problem;
   constructor(problem: Problem) {
@@ -56,7 +57,10 @@ class ProblemTask {
     if (this.done) return;
     ProblemTask.execting.add(this);
     downloadProblem(this.problem)
-      .then(() => console.log("OK    :", this.isbn_c_p))
+      .then(() => {
+        ProblemTask.donwloaded++;
+        console.log("OK    :", this.isbn_c_p);
+      })
       .catch((e) =>
         console.log(
           "FAILED:",
@@ -91,7 +95,20 @@ class ProblemTask {
         });
       }
     }
+    if (ProblemTask.donwloaded >= 1000) push();
     setTimeout(run, 0);
+  };
+  const push = () => {
+    console.log("START...");
+    console.time("ADDED");
+    execSync("git add .");
+    console.timeEnd("ADDED");
+    console.time("COMMITED");
+    execSync('git commit -m "upload"');
+    console.timeEnd("COMMITED");
+    console.time("PUSHED");
+    execSync("git push");
+    console.timeEnd("PUSHED");
   };
   run();
 })();
