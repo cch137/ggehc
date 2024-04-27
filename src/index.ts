@@ -76,32 +76,49 @@ class ProblemTask {
 }
 
 (async () => {
-  const notFounds: string[] = readJSONFile("refs/not-founds.json");
+  console.log("reading downloaded...");
+  const downloaded = new Set<string>(
+    (() => {
+      const _downloaded: string[] = [];
+      const isbns = fs.readdirSync("static/");
+      for (const isbn of isbns) {
+        const pages = fs.readdirSync(`static/${isbn}/`);
+        _downloaded.push(...pages.map((i) => i.replace(".png", "")));
+      }
+      return _downloaded;
+    })()
+  );
+  console.log("reading not-founds...");
+  const notFounds = new Set<string>(readJSONFile("refs/not-founds.json"));
+  console.log("reading problems...");
   const tasks = getProblems()
-    .filter((i) => !notFounds.includes(i.isbn_c_p))
-    .map((i) => new ProblemTask(i));
+    .filter((i) => !downloaded.has(i.isbn_c_p) && !notFounds.has(i.isbn_c_p))
+    .map((i) => new ProblemTask(i))
+    .reverse();
   const addNotFound = (isbn_c_p: string) => {
-    notFounds.push(isbn_c_p);
-    writeJSONFile("refs/not-founds.json", notFounds);
+    notFounds.add(isbn_c_p);
+    writeJSONFile("refs/not-founds.json", [...notFounds]);
   };
   const run = () => {
     if (tasks.length === 0) return;
-    if (ProblemTask.execting.size < 256) {
-      const task = tasks.shift()!;
-      if (!notFounds.includes(task.isbn_c_p)) {
+    if (ProblemTask.execting.size < 64) {
+      const task = tasks.pop()!;
+      if (!notFounds.has(task.isbn_c_p)) {
         task.exec(() => {
           if (!task.done) {
             addNotFound(task.isbn_c_p);
-            tasks.push(task);
+            // tasks.push(task);
           }
         });
+      } else {
+        console.log("skip");
       }
     }
     if (ProblemTask.donwloaded >= 1000) {
       push();
       ProblemTask.donwloaded = 0;
     }
-    setTimeout(run, 0);
+    setTimeout(() => run(), 1);
   };
   const push = () => {
     console.log("START...");
@@ -115,8 +132,8 @@ class ProblemTask {
     execSync("git push");
     console.timeEnd("PUSHED");
   };
-  push();
-  // run();
+  console.log("start processing...");
+  run();
 })();
 
 // CMD: node ./dist/index.js
