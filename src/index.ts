@@ -73,25 +73,27 @@ class ProblemTask {
 
 (async () => {
   const tasks = getProblems().map((i) => new ProblemTask(i));
+  const notFounds: string[] = readJSONFile("refs/not-founds.json");
+  const addNotFound = (isbn_c_p: string) => {
+    notFounds.push(isbn_c_p);
+    writeJSONFile("refs/not-founds.json", notFounds);
+  };
   const run = () => {
     if (tasks.length === 0) return;
     if (ProblemTask.execting.size < 256) {
       const task = tasks.shift()!;
-      task.exec(() => {
-        if (!task.done) tasks.push(task);
-      });
+      if (!notFounds.includes(task.isbn_c_p)) {
+        task.exec(() => {
+          if (!task.done) {
+            addNotFound(task.isbn_c_p);
+            tasks.push(task);
+          }
+        });
+      }
     }
     setTimeout(run, 0);
   };
-  const push = () => {
-    execSync("git add .");
-    execSync('git commit -m "upload"');
-    execSync("git push");
-    console.log("PUSHED");
-    setTimeout(push, 10000);
-  };
   run();
-  setTimeout(push, 10000);
 })();
 
 // CMD: node ./dist/index.js
