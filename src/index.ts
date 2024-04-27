@@ -87,9 +87,10 @@ class ProblemTask {
     execSync("git add .");
     execSync('git commit -m "upload"');
     execSync("git push");
+    console.log("PUSHED");
     setTimeout(push, 1000);
   };
-  // run();
+  run();
   push();
 })();
 
