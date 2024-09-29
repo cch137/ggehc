@@ -92,7 +92,9 @@ class ProblemTask {
   const notFounds = new Set<string>(readJSONFile("refs/not-founds.json"));
   console.log("reading problems...");
   const tasks = getProblems()
-    .filter((i) => !downloaded.has(i.isbn_c_p) && !notFounds.has(i.isbn_c_p))
+    // .filter(i => i.isbn_c_p.startsWith('9780134689487'))
+    .filter((i) => !downloaded.has(i.isbn_c_p))
+    .filter((i) => !notFounds.has(i.isbn_c_p))
     .map((i) => new ProblemTask(i))
     .reverse();
   const addNotFound = (isbn_c_p: string) => {
