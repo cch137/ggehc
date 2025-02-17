@@ -93,7 +93,6 @@ class ProblemTask {
   console.log("reading problems...");
   const tasks = getProblems()
     // .filter(i => i.isbn_c_p.startsWith('9780134689487'))
-    .filter(i => i.isbn_c_p.startsWith('9780133594140'))
     .filter((i) => !downloaded.has(i.isbn_c_p))
     .filter((i) => !notFounds.has(i.isbn_c_p))
     .map((i) => new ProblemTask(i))
