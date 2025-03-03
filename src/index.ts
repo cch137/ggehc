@@ -123,7 +123,6 @@ class ProblemTask {
       }
     }
     if (ProblemTask.donwloaded >= 1000) {
-      ProblemTask.donwloaded = 0;
       await push();
     }
     setTimeout(() => run(), 1);
@@ -136,6 +135,7 @@ class ProblemTask {
     while (ProblemTask.execting.size) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
+    ProblemTask.donwloaded = 0;
     try {
       console.log("START...");
       console.time("ADDED");
