@@ -134,6 +134,9 @@ class ProblemTask {
     console.log(execSync("git push").toString());
     console.timeEnd("PUSHED");
   };
+  console.time("READY");
+  console.log(execSync("git reset --hard HEAD").toString());
+  console.timeEnd("READY");
   console.log("start processing...");
   run();
 })();
