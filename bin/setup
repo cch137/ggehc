@@ -1,0 +1,6 @@
+#!/bin/bash
+source bin/config
+# delete: pm2 delete "$NAME"
+pm2 start dist/index.js --name "$NAME"
+pm2 save
+pm2 startup

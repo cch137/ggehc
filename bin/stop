@@ -1,0 +1,3 @@
+#!/bin/bash
+source bin/config
+pm2 stop "$NAME"

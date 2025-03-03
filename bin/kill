@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo netstat -lpn | grep ':13701' | awk '{print $7}' | cut -d'/' -f1 | xargs -r sudo kill -9

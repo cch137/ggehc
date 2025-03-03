@@ -70,7 +70,7 @@ class ProblemTask {
       )
       .finally(() => {
         ProblemTask.execting.delete(this);
-        if (cb) cb();
+        cb?.();
       });
   }
 }
@@ -116,7 +116,7 @@ class ProblemTask {
         console.log("skip");
       }
     }
-    if (ProblemTask.donwloaded >= 1000) {
+    if (ProblemTask.donwloaded >= 100) {
       ProblemTask.donwloaded = 0;
       push();
     }
@@ -125,13 +125,13 @@ class ProblemTask {
   const push = () => {
     console.log("START...");
     console.time("ADDED");
-    execSync("git add .");
+    console.log(execSync("git add .").toString());
     console.timeEnd("ADDED");
     console.time("COMMITED");
-    execSync('git commit -m "upload"');
+    console.log(execSync('git commit -m "upload"').toString());
     console.timeEnd("COMMITED");
     console.time("PUSHED");
-    execSync("git push");
+    console.log(execSync("git push").toString());
     console.timeEnd("PUSHED");
   };
   console.log("start processing...");
