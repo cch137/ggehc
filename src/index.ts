@@ -101,7 +101,7 @@ class ProblemTask {
     notFounds.add(isbn_c_p);
     writeJSONFile("refs/not-founds.json", [...notFounds]);
   };
-  const run = () => {
+  const run = async () => {
     if (tasks.length === 0) return;
     if (ProblemTask.execting.size < 64) {
       const task = tasks.pop()!;
@@ -118,11 +118,11 @@ class ProblemTask {
     }
     if (ProblemTask.donwloaded >= 100) {
       ProblemTask.donwloaded = 0;
-      push();
+      await push();
     }
     setTimeout(() => run(), 1);
   };
-  const push = () => {
+  const push = async () => {
     console.log("START...");
     console.time("ADDED");
     console.log(execSync("git add .").toString());
@@ -133,6 +133,8 @@ class ProblemTask {
     console.time("PUSHED");
     console.log(execSync("git push").toString());
     console.timeEnd("PUSHED");
+    console.log("Continue in 3 minutes...");
+    await new Promise((resolve) => setTimeout(resolve, 3 * 60 * 1000));
   };
   console.time("READY");
   console.log(execSync("git reset --hard HEAD").toString());
