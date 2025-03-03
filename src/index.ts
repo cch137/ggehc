@@ -38,7 +38,7 @@ function getProblems() {
 }
 
 class ProblemTask {
-  static donwloaded: 0;
+  static donwloaded = 0;
   static execting: Set<ProblemTask> = new Set();
   readonly problem: Problem;
   constructor(problem: Problem) {
