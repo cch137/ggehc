@@ -126,19 +126,26 @@ class ProblemTask {
     setTimeout(() => run(), 1);
   };
   const push = async () => {
-    console.log("START...");
-    console.time("ADDED");
-    console.log(execSync("git add .").toString());
-    console.timeEnd("ADDED");
-    console.time("COMMITED");
-    console.log(execSync('git commit -m "upload"').toString());
-    console.timeEnd("COMMITED");
-    console.time("PUSHED");
-    console.log(execSync(`git push ${process.env.GITURL || ""}`).toString());
-    console.timeEnd("PUSHED");
     const sleepMin = 5;
+    const sleeping = new Promise((resolve) =>
+      setTimeout(resolve, sleepMin * 60 * 1000)
+    );
+    try {
+      console.log("START...");
+      console.time("ADDED");
+      console.log(execSync("git add .").toString());
+      console.timeEnd("ADDED");
+      console.time("COMMITED");
+      console.log(execSync('git commit -m "upload"').toString());
+      console.timeEnd("COMMITED");
+      console.time("PUSHED");
+      console.log(execSync(`git push ${process.env.GITURL || ""}`).toString());
+      console.log(execSync("git fetch").toString());
+      console.log(execSync("git status").toString());
+      console.timeEnd("PUSHED");
+    } catch {}
     console.log(`Continue in ${sleepMin} min...`);
-    await new Promise((resolve) => setTimeout(resolve, sleepMin * 60 * 1000));
+    await sleeping;
   };
   console.time("READY");
   console.log(execSync("git reset --hard HEAD").toString());
