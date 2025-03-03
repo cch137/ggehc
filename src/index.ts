@@ -137,7 +137,7 @@ class ProblemTask {
     console.log(execSync(`git push ${process.env.GITURL || ""}`).toString());
     console.timeEnd("PUSHED");
     console.log("Continue in 1 min...");
-    await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
+    await new Promise((resolve) => setTimeout(resolve, 0.5 * 60 * 1000));
   };
   console.time("READY");
   console.log(execSync("git reset --hard HEAD").toString());
