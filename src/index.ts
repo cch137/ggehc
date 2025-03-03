@@ -129,10 +129,13 @@ class ProblemTask {
     setTimeout(() => run(), 1);
   };
   const push = async () => {
-    const sleepMin = 5;
+    const sleepMin = 60;
     const sleeping = new Promise((resolve) =>
       setTimeout(resolve, sleepMin * 60 * 1000)
     );
+    while (ProblemTask.execting.size) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
     try {
       console.log("START...");
       console.time("ADDED");
