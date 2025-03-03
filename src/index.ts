@@ -119,7 +119,7 @@ class ProblemTask {
         console.log("skip");
       }
     }
-    if (ProblemTask.donwloaded >= 100) {
+    if (ProblemTask.donwloaded >= 1000) {
       ProblemTask.donwloaded = 0;
       await push();
     }
@@ -137,7 +137,7 @@ class ProblemTask {
     console.log(execSync(`git push ${process.env.GITURL || ""}`).toString());
     console.timeEnd("PUSHED");
     console.log("Continue in 1 min...");
-    await new Promise((resolve) => setTimeout(resolve, 0.5 * 60 * 1000));
+    await new Promise((resolve) => setTimeout(resolve, 5 * 60 * 1000));
   };
   console.time("READY");
   console.log(execSync("git reset --hard HEAD").toString());
