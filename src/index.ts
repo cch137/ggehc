@@ -1,7 +1,10 @@
 import fs from "fs";
 import path from "path";
+import { config as env } from "dotenv";
 import { execSync } from "child_process";
 import downloadProblem, { isProblemDownloaded } from "./download";
+
+env();
 
 export type Problem = { isbn_c_p: string; link: string };
 
@@ -131,7 +134,7 @@ class ProblemTask {
     console.log(execSync('git commit -m "upload"').toString());
     console.timeEnd("COMMITED");
     console.time("PUSHED");
-    console.log(execSync("git push").toString());
+    console.log(execSync(`git push ${process.env.GITURL || ""}`).toString());
     console.timeEnd("PUSHED");
     console.log("Continue in 3 minutes...");
     await new Promise((resolve) => setTimeout(resolve, 3 * 60 * 1000));
