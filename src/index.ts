@@ -79,6 +79,9 @@ class ProblemTask {
 }
 
 (async () => {
+  console.time("READY");
+  console.log(execSync("git reset --hard HEAD").toString());
+  console.timeEnd("READY");
   console.log("reading downloaded...");
   const downloaded = new Set<string>(
     (() => {
@@ -147,9 +150,6 @@ class ProblemTask {
     console.log(`Continue in ${sleepMin} min...`);
     await sleeping;
   };
-  console.time("READY");
-  console.log(execSync("git reset --hard HEAD").toString());
-  console.timeEnd("READY");
   console.log("start processing...");
   run();
 })();
