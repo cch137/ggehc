@@ -58,8 +58,8 @@ class ProblemTask {
     ProblemTask.execting.add(this);
     downloadProblem(this.problem)
       .then(() => {
-        ProblemTask.donwloaded++;
-        console.log("OK    :", this.isbn_c_p);
+        ++ProblemTask.donwloaded;
+        console.log("OK    :", this.isbn_c_p, `(${ProblemTask.donwloaded})`);
       })
       .catch((e) =>
         console.log(
