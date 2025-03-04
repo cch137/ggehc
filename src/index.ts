@@ -79,7 +79,6 @@ class ProblemTask {
 }
 
 (async () => {
-  return;
   console.time("READY");
   console.log(execSync("git reset --hard HEAD").toString());
   console.timeEnd("READY");
