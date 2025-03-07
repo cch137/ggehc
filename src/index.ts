@@ -103,6 +103,7 @@ class ProblemTask {
     .filter((i) => !notFounds.has(i.isbn_c_p))
     .map((i) => new ProblemTask(i))
     .reverse();
+  downloaded.clear();
   const addNotFound = (isbn_c_p: string) => {
     notFounds.add(isbn_c_p);
     writeJSONFile("refs/not-founds.json", [...notFounds]);
@@ -142,7 +143,11 @@ class ProblemTask {
       console.log(execSync("git add .").toString());
       console.timeEnd("ADDED");
       console.time("COMMITED");
-      console.log(execSync('git commit -m "upload"').toString());
+      console.log(
+        execSync(
+          `git commit -m "upload (${tasks.length} remaining)"`
+        ).toString()
+      );
       console.timeEnd("COMMITED");
       console.time("PUSHED");
       console.log(execSync(`git push ${process.env.GITURL || ""}`).toString());
