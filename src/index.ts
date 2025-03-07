@@ -108,9 +108,16 @@ class ProblemTask {
     notFounds.add(isbn_c_p);
     writeJSONFile("refs/not-founds.json", [...notFounds]);
   };
+  const sleepMin = 60;
+  let sleeping: Promise<void> | null = null;
   const run = async () => {
     if (tasks.length === 0) return;
-    if (ProblemTask.execting.size < 64) {
+    if (!sleeping) {
+      sleeping = new Promise((resolve) =>
+        setTimeout(resolve, sleepMin * 60 * 1000)
+      );
+    }
+    if (ProblemTask.execting.size < 48) {
       const task = tasks.pop()!;
       if (!notFounds.has(task.isbn_c_p)) {
         task.exec(() => {
@@ -125,14 +132,13 @@ class ProblemTask {
     }
     if (ProblemTask.donwloaded >= 1000) {
       await push();
+      console.log(`Continue in ${sleepMin} min...`);
+      await sleeping;
+      sleeping = null;
     }
     setTimeout(() => run(), 1);
   };
   const push = async () => {
-    const sleepMin = 60;
-    const sleeping = new Promise((resolve) =>
-      setTimeout(resolve, sleepMin * 60 * 1000)
-    );
     while (ProblemTask.execting.size) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
@@ -155,8 +161,6 @@ class ProblemTask {
       console.log(execSync("git status").toString());
       console.timeEnd("PUSHED");
     } catch {}
-    console.log(`Continue in ${sleepMin} min...`);
-    await sleeping;
   };
   console.log("start processing...");
   run();
