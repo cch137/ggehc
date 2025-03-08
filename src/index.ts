@@ -108,7 +108,7 @@ class ProblemTask {
     notFounds.add(isbn_c_p);
     writeJSONFile("refs/not-founds.json", [...notFounds]);
   };
-  const sleepMin = 60;
+  const sleepMin = 0;
   let sleeping: Promise<void> | null = null;
   const run = async () => {
     if (tasks.length === 0) return;
