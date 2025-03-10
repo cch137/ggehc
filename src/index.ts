@@ -108,7 +108,7 @@ class ProblemTask {
     notFounds.add(isbn_c_p);
     writeJSONFile("refs/not-founds.json", [...notFounds]);
   };
-  const sleepMin = 0;
+  const sleepMin = 90;
   let sleeping: Promise<void> | null = null;
   const run = async () => {
     if (tasks.length === 0) return;
@@ -130,7 +130,7 @@ class ProblemTask {
         console.log("skip");
       }
     }
-    if (ProblemTask.donwloaded >= 1000) {
+    if (ProblemTask.donwloaded >= 1000 || !tasks.length) {
       await push();
       console.log(`Continue in ${sleepMin} min...`);
       await sleeping;
